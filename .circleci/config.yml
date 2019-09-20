@@ -83,14 +83,19 @@ jobs:
           name: Deploy
           command: |
             if [[ -z ${CIRCLE_PULL_REQUEST} ]]; then
-              echo "export WORKSPACE=${CIRCLE_WORKING_DIRECTORY}" >> $BASH_ENV
-              echo "export REPO_URL=${CIRCLE_REPOSITORY_URL}" >> $BASH_ENV
               source $BASH_ENV
               git config --global user.email $GH_EMAIL
               git config --global user.name $GH_NAME
               echo "Host * " >> ~/.ssh/config
               echo "  StrictHostKeyChecking no" >> ~/.ssh/config
-              ./gh_pages_deploy.sh
+              git clone -b gh-pages --single-branch ${CIRCLE_REPOSITORY_URL} /out
+              cd /out
+              cp -aR ${CIRCLE_WORKING_DIRECTORY}/* .
+              git add .
+              git commit -m "Automated deployment to Github Pages: ${BUILD_TAG}" --allow-empty
+              git push origin gh-pages
+              git clean -dfx
+              cd -
             else
               echo "PR, not deploying..."
               echo "${CIRCLE_PULL_REQUEST}"
