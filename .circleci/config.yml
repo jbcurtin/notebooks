@@ -13,9 +13,9 @@ jobs:
 
       - checkout
 
-        # - restore_cache:
-        # -   keys:
-        # -     - v1-env-{{ checksum "environment.yml" }}
+      - restore_cache:
+          keys:
+            - v1-env-{{ checksum "environment.yml" }}
 
       - run:
           name: Setup Environment
@@ -35,7 +35,7 @@ jobs:
             conda info --envs
             mkdir test-results
             find . -name nbpages
-            # python factory.py --report test-results/results.xml
+            python factory.py --report test-results/results.xml
           no_output_timeout: 20m
 
       - store_test_results:
