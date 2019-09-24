@@ -34,7 +34,8 @@ jobs:
             source activate notebooks_env
             conda info --envs
             mkdir test-results
-            python factory.py --report test-results/results.xml
+            find . -name nbpages
+            # python factory.py --report test-results/results.xml
           no_output_timeout: 20m
 
       - store_test_results:
