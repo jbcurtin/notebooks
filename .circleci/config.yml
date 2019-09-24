@@ -34,8 +34,6 @@ jobs:
             source activate notebooks_env
             conda info --envs
             mkdir test-results
-            ls
-            ls src
             python factory.py --report test-results/results.xml
           no_output_timeout: 20m
 
