@@ -39,6 +39,7 @@ jobs:
       - run:
           name: Build Artifacts
           command: |
+            source activate notebooks_env
             python build_artifacts.py
 
       - store_test_results:
