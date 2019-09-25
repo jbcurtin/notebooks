@@ -10,4 +10,6 @@ dependencies:
   - ca-certificates=2019.8.28
   - pip
   - virtualenv=16.0.0
+  - pip:
+    - "-e git+https://github.com/kyrus/python-junit-xml.git@63db26da353790500642fd02cae1543eb41aab8b#egg=junit_xml"
 

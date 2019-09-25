@@ -12,6 +12,10 @@ import time
 import types
 import typing
 
+from datetime import datetime
+
+from junit_xml import TestSuite, TestCase
+
 root = logging.getLogger()
 root.setLevel(logging.INFO)
 handler = logging.StreamHandler(sys.stdout)
@@ -23,13 +27,10 @@ logger = logging.getLogger(__file__)
 IPYDB_REQUIRED_FILES: typing.List[str] = ['requirements.txt']
 ENCODING: str = 'utf-8'
 ARTIFACT_DEST_DIR: str = '/tmp/artifacts'
-BUILD_STATE_PATH: str = os.path.join('/tmp', 'build-state.json')
+TEST_OUTPUT_DIR: str = '/tmp/test-results'
 BUILD_STATE: typing.Dict[str, typing.Any] = {}
-if os.path.exists(BUILD_STATE_PATH):
-    with open(BUILD_STATE_PATH, 'r') as stream:
-        data = stream.read()
-        if data:
-            BUILD_STATE: typing.Dict[str, typing.Any] = json.loads(data)
+if not os.path.exists(TEST_OUTPUT_DIR):
+    os.makedirs(TEST_OUTPUT_DIR)
 
 def run_command(cmd: typing.List[str]) -> types.GeneratorType:
     proc = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -81,24 +82,36 @@ for artifact_path in find_artifacts(ARTIFACT_DEST_DIR):
     build_dir: str = os.path.dirname(build_script_path)
     logger.info(f'Changing to build_dir[{build_dir}]')
     os.chdir(build_dir)
-    BUILD_STATE[notebook_name] = {'logs': {'stdout': [], 'stderr': []}}
+    BUILD_STATE[notebook_name] = {'stdout': [], 'stderr': []}
+    start = datetime.utcnow()
     for return_code, comm, in run_command(['bash', 'build.sh']):
         if return_code > 0:
             logger.error(comm)
             BUILD_STATE[notebook_name]['exit-code'] = return_code
-            BUILD_STATE[notebook_name]['logs']['stderr'].append(comm)
+            BUILD_STATE[notebook_name]['stderr'].append(comm)
 
         else:
             BUILD_STATE[notebook_name]['exit-code'] = return_code
-            BUILD_STATE[notebook_name]['logs']['stdout'].append(comm)
+            BUILD_STATE[notebook_name]['stdout'].append(comm)
             logger.info(comm)
 
+    delta = datetime.utcnow() - start
     logger.info(f'Changing back to old working dir[{owd}]')
     os.chdir(owd)
+    test_suite = TestSuite(f'{notebook_name} Test Suite', [
+        TestCase(
+            "Requirements Install Test",
+            f'{BUILD_STATE[notebook_name]["exit-code"]}: {notebook_name}',
+            delta.seconds,
+            '\n'.join(BUILD_STATE[notebook_name]['stdout']),
+            '\n'.join(BUILD_STATE[notebook_name]['stderr'])),
+    ])
+    test_output_path: str = os.path.join(TEST_OUTPUT_DIR, f'{notebook_name}.xml')
+    with open(test_output_path, 'w') as stream:
+        stream.write(TestSuite.to_xml_string([test_suite]))
+
     break
 
-with open(BUILD_STATE_PATH, 'w') as stream:
-    stream.write(json.dumps(BUILD_STATE, indent=2))
 # from nbpages import make_parser, run_parsed, make_html_index
 # 
 # args = make_parser().parse_args()

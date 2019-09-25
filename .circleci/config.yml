@@ -42,7 +42,7 @@ jobs:
             python build_artifacts.py
 
       - store_test_results:
-          path: /tmp/build-state.json
+          path: /tmp/test-results
 
 workflows:
   version: 2.1
