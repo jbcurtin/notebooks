@@ -103,7 +103,6 @@ for artifact_path in find_artifacts(ARTIFACT_DEST_DIR):
     if BUILD_STATE[notebook_name]['exit-code'] > 0:
         test_case.result = Error('\n'.join(BUILD_STATE[notebook_name]['stderr']), BUILD_STATE[notebook_name]['exit-code'])
         TEST_CASES.append(test_case)
-        break
 
     TEST_CASES.append(test_case)
 
