@@ -14,7 +14,7 @@ import typing
 
 from datetime import datetime
 
-from junit_xml import TestSuite, TestCase
+from junitparser import TestCase, TestSuite, JUnitXml, Skipped, Error
 
 root = logging.getLogger()
 root.setLevel(logging.INFO)
@@ -31,6 +31,7 @@ TEST_OUTPUT_DIR: str = '/tmp/test-results'
 BUILD_STATE: typing.Dict[str, typing.Any] = {}
 if not os.path.exists(TEST_OUTPUT_DIR):
     os.makedirs(TEST_OUTPUT_DIR)
+TEST_CASES: typing.List[TestCase] = []
 
 def run_command(cmd: typing.List[str]) -> types.GeneratorType:
     proc = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -98,17 +99,20 @@ for artifact_path in find_artifacts(ARTIFACT_DEST_DIR):
     delta = datetime.utcnow() - start
     logger.info(f'Changing back to old working dir[{owd}]')
     os.chdir(owd)
-    test_suite = TestSuite(f'{notebook_name} Test Suite', [
-        TestCase(
-            " -> Requirements Install Test",
-            f'{BUILD_STATE[notebook_name]["exit-code"]}: {notebook_name}',
-            delta.seconds,
-            '\n'.join(BUILD_STATE[notebook_name]['stdout']),
-            '\n'.join(BUILD_STATE[notebook_name]['stderr'])),
-    ])
-    test_output_path: str = os.path.join(TEST_OUTPUT_DIR, f'{notebook_name}.xml')
-    with open(test_output_path, 'w') as stream:
-        stream.write(TestSuite.to_xml_string([test_suite]))
+    test_case = TestCase(f'{notebook_name} Test')
+    if BUILD_STATE[notebook_name]['exit-code'] > 0:
+        test_case.result = Error('\n'.join(BUILD_STATE[notebook_name]['stderr']), BUILD_STATE[notebook_name]['exit-code'])
+        TEST_CASES.append(test_case)
+        break
+
+    TEST_CASES.append(test_case)
+
+test_suite = TestSuite(f'Notebooks Test Suite')
+[test_suite.add_testcase(case) for case in TEST_CASES]
+test_output_path: str = os.path.join(TEST_OUTPUT_DIR, f'results.xml')
+xml = JUnitXml()
+xml.add_testsuite(test_suite)
+xml.write(test_output_path)
 
 # from nbpages import make_parser, run_parsed, make_html_index
 # 
