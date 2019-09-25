@@ -26,43 +26,49 @@ jobs:
           key: v1-env-{{ checksum "environment.yml" }}
           paths:
             - /opt/conda
+            - src/nbpages
 
       - run:
-          name: Run/convert notebooks
-          command: |
-            conda info --envs
-            source activate notebooks_env
-            conda info --envs
-            mkdir test-results
-            find . -name nbpages
-            python factory.py --report test-results/results.xml
-          no_output_timeout: 20m
+        name: Create Artifacts
+        command: |
+          python factory.py
 
-      - store_test_results:
-          path: test-results
+          # - run:
+          # - name: Run/convert notebooks
+          # - command: |
+          # -   conda info --envs
+          # -   source activate notebooks_env
+          # -   conda info --envs
+          # -   mkdir test-results
+          # -   find . -name nbpages
+          # -   python factory.py --report test-results/results.xml
+          # - no_output_timeout: 20m
 
-      - run:
-          name: Check notebooks
-          command: |
-            COMMIT_RANGE=$(echo "${CIRCLE_COMPARE_URL}" | cut -d/ -f7)
-            if [[ $COMMIT_RANGE != *"..."* ]]; then
-              COMMIT_RANGE="${COMMIT_RANGE}...${COMMIT_RANGE}"
-            fi
-            source activate notebooks_env
-            conda info --envs
-            python -m "nbpages.check_nbs" --commit-range=${COMMIT_RANGE}
+          #- store_test_results:
+          #- stpath: test-results
 
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - repo
+          # - run:
+          # - runame: Check notebooks
+          # - rucommand: |
+          # -   COMMIT_RANGE=$(echo "${CIRCLE_COMPARE_URL}" | cut -d/ -f7)
+          # -   if [[ $COMMIT_RANGE != *"..."* ]]; then
+          # -     COMMIT_RANGE="${COMMIT_RANGE}...${COMMIT_RANGE}"
+          # -   fi
+          # -   source activate notebooks_env
+          # -   conda info --envs
+          # -   python -m "nbpages.check_nbs" --commit-range=${COMMIT_RANGE}
 
-      - store_artifacts:
-          path: ~/repo
+          # - persist_to_workspace:
+          # - ruroot: ~/
+          # - rupaths:
+          # - repo
 
-      - run:
-          name: "Built notebooks are available at:"
-          command: NB_URL="${CIRCLE_BUILD_URL}/artifacts/${CIRCLE_NODE_INDEX}/${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/index.html"; echo $NB_URL
+          # - strore_artifacts:
+          # - rupath: ~/repo
+
+          # - run:
+          # - runame: "Built notebooks are available at:"
+          # - rucommand: NB_URL="${CIRCLE_BUILD_URL}/artifacts/${CIRCLE_NODE_INDEX}/${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/index.html"; echo $NB_URL
 
 
   deploy:
