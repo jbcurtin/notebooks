@@ -29,12 +29,12 @@ jobs:
             - src/nbpages
 
       - run:
-        name: Create Artifacts
-        command: |
-          python factory.py
+          name: Create Artifacts
+          command: |
+            python factory.py
 
       - store_artifacts:
-        path: /tmp/artifacts
+          path: /tmp/artifacts
 
 
 workflows:
