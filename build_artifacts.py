@@ -100,7 +100,7 @@ for artifact_path in find_artifacts(ARTIFACT_DEST_DIR):
     os.chdir(owd)
     test_suite = TestSuite(f'{notebook_name} Test Suite', [
         TestCase(
-            "Requirements Install Test",
+            " -> Requirements Install Test",
             f'{BUILD_STATE[notebook_name]["exit-code"]}: {notebook_name}',
             delta.seconds,
             '\n'.join(BUILD_STATE[notebook_name]['stdout']),
@@ -109,8 +109,6 @@ for artifact_path in find_artifacts(ARTIFACT_DEST_DIR):
     test_output_path: str = os.path.join(TEST_OUTPUT_DIR, f'{notebook_name}.xml')
     with open(test_output_path, 'w') as stream:
         stream.write(TestSuite.to_xml_string([test_suite]))
-
-    break
 
 # from nbpages import make_parser, run_parsed, make_html_index
 # 
