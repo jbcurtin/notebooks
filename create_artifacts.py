@@ -52,7 +52,7 @@ set -e
 cd {build_path}
 source activate notebooks_env
 virtualenv -p $(which python3) env
-conda deactivate notebooks_env
+conda deactivate
 source env/bin/activate
 pip install -r requirements.txt
 pip install jupyter
