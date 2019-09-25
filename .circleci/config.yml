@@ -33,6 +33,9 @@ jobs:
         command: |
           python factory.py
 
+      - store_artifacts:
+        path: /tmp/artifacts
+
           # - run:
           # - name: Run/convert notebooks
           # - command: |
