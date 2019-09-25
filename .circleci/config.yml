@@ -22,20 +22,27 @@ jobs:
           command: |
             ./.circleci/setup_env.sh
 
-      - save_cache:
-          key: v1-env-{{ checksum "environment.yml" }}
-          paths:
-            - /opt/conda
-            - src/nbpages
+        # - save_cache:
+        #  key: v1-env-{{ checksum "environment.yml" }}
+        #  paths:
+        #    - /opt/conda
+        #    - src/nbpages
 
       - run:
           name: Create Artifacts
           command: |
-            python factory.py
+            python create_artifacts.py
 
       - store_artifacts:
           path: /tmp/artifacts
 
+      - run:
+          name: Build Artifacts
+          command: |
+            python build_artifacts.py
+
+      - store_test_results:
+          path: /tmp/build-state.json
 
 workflows:
   version: 2.1

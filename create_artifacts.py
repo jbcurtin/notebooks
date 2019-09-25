@@ -2,12 +2,10 @@
 
 import logging
 import os
-import subprocess
 import shutil
 import sys
 import tarfile
 import tempfile
-import time
 import types
 import typing
 
@@ -21,19 +19,7 @@ logger = logging.getLogger(__file__)
 
 IPYDB_REQUIRED_FILES: typing.List[str] = ['requirements.txt']
 ENCODING: str = 'utf-8'
-
-def run_command(cmd: typing.List[str], allow_error: typing.List[int] = [0]) -> str:
-    proc = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    while proc.poll() is None:
-        time.sleep(.1)
-
-    if proc.poll() > 0:
-        if not proc.poll() in allow_error:
-            raise NotImplementedError(f'{proc.poll()}, {proc.stderr.read()}')
-
-        return proc.stderr.read().decode(ENCODING)
-
-    return proc.stdout.read().decode(ENCODING)
+ARTIFACT_DEST_DIR: str = '/tmp/artifacts'
 
 def find_ipynb_files(start_path: str) -> types.GeneratorType:
     for root, dirnames, filenames in os.walk(start_path):
@@ -81,22 +67,10 @@ cd -
     with tarfile.open(artifact_path, "w:gz") as tar:
         tar.add(build_path, arcname=os.path.basename(build_path))
 
-    artifact_dest_dir: str = '/tmp/artifacts'
-    if not os.path.exists(artifact_dest_dir):
-        os.makedirs(artifact_dest_dir)
+    if not os.path.exists(ARTIFACT_DEST_DIR):
+        os.makedirs(ARTIFACT_DEST_DIR)
 
-    artifact_dest: str = os.path.join(artifact_dest_dir, artifact_name)
+    artifact_dest: str = os.path.join(ARTIFACT_DEST_DIR, artifact_name)
     logger.info(f'Moving Notebook[{notebook_name_plain}]')
     shutil.move(artifact_path, artifact_dest)
-    # run_command(['bash', setup_script_path])
-    # import ipdb; ipdb.set_trace()
-    # pass
 
-# from nbpages import make_parser, run_parsed, make_html_index
-# 
-# args = make_parser().parse_args()
-# 
-# converted = run_parsed('.', output_type='HTML', args=args)
-# 
-# converted = [item for item in converted if not os.path.basename(item) in ['test-fail.html', 'test-succeed.html']]
-# make_html_index(converted, './index.tpl')
