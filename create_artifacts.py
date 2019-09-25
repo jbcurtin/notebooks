@@ -50,7 +50,9 @@ for notebook_path in find_ipynb_files(os.getcwd()):
     setup_script: str = f"""#!/usr/bin/env bash
 set -e
 cd {build_path}
+conda activate notebooks_env
 virtualenv -p $(which python3) env
+conda deactivate notebooks_env
 source env/bin/activate
 pip install -r requirements.txt
 pip install jupyter
