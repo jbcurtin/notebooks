@@ -16,3 +16,4 @@ dependencies:
     - '-e git+https://github.com/eteq/nbpages.git@b9ec8410803357939210e068af7e14a6f0625fab#egg=nbpages'
     - jupyter==1.0.0
     - jupyter-client==5.3.3
+    - astroquery==0.3.10
