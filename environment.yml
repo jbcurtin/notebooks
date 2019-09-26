@@ -18,3 +18,4 @@ dependencies:
     - jupyter-client==5.3.3
     - astroquery==0.3.10
     - matplotlib>=2.2.2
+    - numpy>=1.15.4
