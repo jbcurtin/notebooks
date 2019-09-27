@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+# Only runs on master
 if [ -z "${CIRCLE_PULL_REQUEST}" ]; then
     git config --global user.email devnull@circleci.com
     git config --global user.name CircleCI
@@ -12,7 +13,7 @@ if [ -z "${CIRCLE_PULL_REQUEST}" ]; then
     cd /tmp/out
     git add .
     git commit -m 'Automated deployment to Github Pages: ${BUILD_TAG}' -a || true
-    git push origin gh-pages || true
+    git push origin gh-pages
     git clean -dfx
 fi
 exit 0
