@@ -68,7 +68,9 @@ source env/bin/activate
 if [ -f "pre_requirements.txt" ]; then
     pip install -r pre_requirements.txt
 fi
-pip install -r requirements.txt
+if [ -f "requirements.txt" ]; then
+    pip install -r requirements.txt
+fi
 pip install jupyter
 jupyter nbconvert --stdout --to html {notebook_filepath} > {notebook_name_plain}.html
 cd -
