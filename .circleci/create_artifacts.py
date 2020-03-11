@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import glob
 import os
 import shutil
 import sys
@@ -52,6 +53,11 @@ def main():
         shutil.rmtree(build_path)
         build_script_path = os.path.join(build_path, 'build.sh')
         shutil.copytree(notebook_path, build_path)
+        paths: typing.List[str] = glob.glob(f'{build_path}/*.ipynb')
+        if len(paths) > 1:
+            raise NotImplementedError('Support for building more than one .ipynb file at a time is not yet supported')
+        notebook_filepath: str = paths[0]
+
         setup_script: str = f"""#!/usr/bin/env bash
 set -e
 cd {build_path}
@@ -64,7 +70,7 @@ if [ -f "pre_requirements.txt" ]; then
 fi
 pip install -r requirements.txt
 pip install jupyter
-jupyter nbconvert --stdout --to html {notebook_name} > {notebook_name_plain}.html
+jupyter nbconvert --stdout --to html {notebook_filepath} > {notebook_name_plain}.html
 cd -
 """
         with open(build_script_path, 'w') as stream:
