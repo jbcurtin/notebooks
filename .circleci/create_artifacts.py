@@ -20,6 +20,10 @@ logger = logging.getLogger(__file__)
 IPYDB_REQUIRED_FILES: typing.List[str] = ['requirements.txt']
 ENCODING: str = 'utf-8'
 ARTIFACT_DEST_DIR: str = '/tmp/artifacts'
+if os.path.exists(ARTIFACT_DEST_DIR):
+    shutil.rmtree(ARTIFACT_DEST_DIR)
+
+os.makedirs(ARTIFACT_DEST_DIR)
 
 def find_ipynb_files(start_path: str) -> types.GeneratorType:
     for root, dirnames, filenames in os.walk(start_path):
