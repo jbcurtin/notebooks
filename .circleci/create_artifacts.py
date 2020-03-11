@@ -59,6 +59,9 @@ source activate notebooks_env
 virtualenv -p $(which python3) env
 conda deactivate
 source env/bin/activate
+if [ -f "pre_requirements.txt" ]; then
+    pip install -r pre_requirements.txt
+fi
 pip install -r requirements.txt
 pip install jupyter
 jupyter nbconvert --stdout --to html {notebook_name} > {notebook_name_plain}.html
