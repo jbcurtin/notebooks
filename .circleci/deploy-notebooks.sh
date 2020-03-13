@@ -13,6 +13,8 @@ if [ -z "${CIRCLE_PULL_REQUEST}" ]; then
     cd /tmp/out
     rm -rf pages
     mv /tmp/artifacts-html pages
+    rm index.html
+    mv pages/index.html .
     git add pages -f
     git commit -m 'Automated deployment to Github Pages: ${BUILD_TAG}' -a || true
     git push origin gh-pages
