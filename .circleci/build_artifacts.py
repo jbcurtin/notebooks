@@ -27,11 +27,17 @@ logger = logging.getLogger(__file__)
 IPYDB_REQUIRED_FILES: typing.List[str] = ['requirements.txt']
 ENCODING: str = 'utf-8'
 ARTIFACT_DEST_DIR: str = '/tmp/artifacts'
+ARTIFACT_HTML_DIR: str = '/tmp/artifacts-html'
 TEST_OUTPUT_DIR: str = '/tmp/test-results'
 BUILD_STATE: typing.Dict[str, typing.Any] = {}
 if not os.path.exists(TEST_OUTPUT_DIR):
     os.makedirs(TEST_OUTPUT_DIR)
 TEST_CASES: typing.List[TestCase] = []
+
+if os.path.exists(ARTIFACT_HTML_DIR):
+    shutil.rmtree(ARTIFACT_HTML_DIR)
+
+os.makedirs(ARTIFACT_HTML_DIR)
 
 def run_command(cmd: typing.List[str]) -> types.GeneratorType:
     proc = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -86,7 +92,7 @@ def main():
         os.chdir(build_dir)
         BUILD_STATE[notebook_name] = {'stdout': [], 'stderr': []}
         start = datetime.utcnow()
-        for return_code, comm, in run_command(['bash', 'build.sh']):
+        for return_code, comm, in run_command([f'bash build.sh {ARTIFACT_HTML_DIR}']):
             if return_code > 0:
                 logger.error(comm)
                 BUILD_STATE[notebook_name]['exit-code'] = return_code

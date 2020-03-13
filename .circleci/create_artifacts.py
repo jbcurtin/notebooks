@@ -57,9 +57,14 @@ def main():
         if len(paths) > 1:
             raise NotImplementedError('Support for building more than one .ipynb file at a time is not yet supported')
         notebook_filepath: str = paths[0]
-
+        notebook_groups: str = os.path.relpath(notebook_path).split('notebooks')[1].strip('/')
         setup_script: str = f"""#!/usr/bin/env bash
 set -e
+
+if [ -z "$1" ]; then
+    echo "Unable to build; Artifact DIR Required" >&2
+    exit 1
+fi
 cd {build_path}
 source activate notebooks_env
 virtualenv -p $(which python3) env
@@ -72,7 +77,8 @@ if [ -f "requirements.txt" ]; then
     pip install -r requirements.txt
 fi
 pip install jupyter
-jupyter nbconvert --stdout --to html {notebook_filepath} > {notebook_name_plain}.html
+mkdir -p $1/{notebook_groups}
+jupyter nbconvert --stdout --to html {notebook_filepath} > $1/{notebook_groups}/{notebook_name_plain}.html
 cd -
 """
         with open(build_script_path, 'w') as stream:

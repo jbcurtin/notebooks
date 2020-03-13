@@ -34,10 +34,10 @@ jobs:
           path: /tmp/test-results
 
       - run:
-          name: Make Pages
+          name: Consolidate Pages
           command: |
             source activate notebooks_env
-            python ./.circleci/make_pages.py
+            python ./.circleci/consolidate_pages.py
 
       - add_ssh_keys
       - run:
