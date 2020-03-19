@@ -1,0 +1,4 @@
+{
+  "title": "Programmatic Replacements for NICMOS Units Conversion Form",
+  "description": "## Imports\n- All the examples require `astropy.units`. See `Units` and `Quantities` in Astropy for more information.\n- Some examples require the package `snyphot`.\n- Some examples require the `math` library. "
+}

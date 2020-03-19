@@ -1,0 +1,4 @@
+{
+  "title": "MAST Table Access Protocol PanSTARRS 1 DR2 Demo",
+  "description": "<br> This tutorial demonstrates how to use astroquery to access PanSTARRS 1 Data Release 2 via a Virtual Observatory standard Table Access Protocol (TAP) service at MAST, and work with the resultant data. It relies on Python 3 and astroquery, as well as some other common scientific packages.\n\n***\n### Table of Contents\n\n1. [TAP Service Introduction](#TAP-Service-Introduction)\n2. [Imports](#Imports)\n3. [Connecting to a TAP Service](#Connecting-to-a-TAP-Service)\n4. [Use Cases](#Use-Cases)\n5. [Additional Resources](#Additional-Resources)\n6. [About This Notebook](#About-this-Notebook)\n***"
+}

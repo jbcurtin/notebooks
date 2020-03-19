@@ -1,0 +1,4 @@
+{
+  "title": "Creating a simulated starfield image and performing photometry using `webbpsf` and `photutils.GriddedPSFModel`",
+  "description": "## Imports\n\n* *matplotlib inline* for creating non-interactive plots\n* *numpy* for numerical computations\n* *astropy.io.fits* for accessing FITS files\n* *astropy.stats.gaussian_sigma_to_fwhm* for converting $\\sigma$ to FWHM\n* *astropy.table.Table* for constructing Astropy table\n* *astropy.utils.misc.NumpyRNGContext* for reproducible random result\n* *astropy.visualization* for normalized image display\n* *photutils* for photometry related classes and functions\n* *webbpsf* for JWST PSF related functions"
+}

@@ -1,0 +1,4 @@
+{
+  "title": "Intermediate: Finding Flares and Variable Stars in TASC Light Curves",
+  "description": "### Table of contents\n\n1. [Exploring a known stellar flare](#Exploring-a-stellar-flare) \n    1. [Querying MAST](#Querying-MAST)\n    2. [Downloading the light curves](#Downloading-the-light-curves)\n    3. [Plotting the light curves](#Plotting-the-light-curves)\n    4. [Making an animation](#Making-an-animation)\n2. [Exploring a variable star](#Exploring-a-variable-star) \n    1. [Overlaying TESS Input Catalog sources](#Overlaying-TIC-sources)\n    2. [Getting the variable star light curve](#Getting-the-variable-star-light-curve)\n    3. [Plotting the variable star light curve](#Plotting-the-variable-star-light-curve)\n    4. [Finding the period of the variable star](#Finding-the-period)\n4. [Additional Resources](#Additional-Resources)  \n5. [About this Notebook](#About-this-Notebook) "
+}

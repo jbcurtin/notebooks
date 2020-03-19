@@ -1,0 +1,4 @@
+{
+  "title": "Intermediate: Overlay a Cutout of the TESS FFIs with DSS imaging",
+  "description": "\n## TESSCut Overlay with DSS\nThis notebook is an example of accessing and displaying a TESS FFI Cutout using the MAST TessCut service built into astroquery.  It uses astroquery to retrieve the related objects from the Tess Input Catalog (TIC). We then grab the related DSS image and overlay the TIC objects and the TESSCut image altogether.   \n\nThis notebook uses several base packages but requires the following additional packages:\n- astropy\n- astroquery > 0.3.9\n- k2flix\n- ipython > 7.2\n- ipywidgets > 7.4.2\n- reproject"
+}

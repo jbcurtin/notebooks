@@ -1,0 +1,4 @@
+{
+  "title": "Using updated astrometry solutions",
+  "description": "As part of an effort to improve the absolute astrometry of HST images, STScI has created multiple new astrometric solutions for ACS and WFC3 images.  These solutions are contained in the World Coordinate System (WCS) of the images, as well as headerlet extesions.  This notebook provides an example workflow showing how to use/change to a different solution."
+}

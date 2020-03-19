@@ -1,0 +1,4 @@
+{
+  "title": "Beginner: Read and Display a K2 Full Frame Image",
+  "description": "## Import Statements\n* **astropy.io.fits** allows us to interact with the FITS files.\n* **astropy.wcs.WCS** allows us to interpret the world coordinate system.\n* **matplotlib.pyplot** is used to display the image.\n* **numpy** is used for array manipulation."
+}
