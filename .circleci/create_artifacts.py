@@ -56,8 +56,10 @@ def main():
         paths: typing.List[str] = glob.glob(f'{build_path}/*.ipynb')
         if len(paths) > 1:
             raise NotImplementedError('Support for building more than one .ipynb file at a time is not yet supported')
+
         notebook_filepath: str = paths[0]
         notebook_groups: str = os.path.relpath(notebook_path).split('notebooks')[1].strip('/')
+        shutil.copyfile('.circleci/extract_metadata_from_notebook.py', f'{build_path}/extract_metadata_from_notebook.py')
         setup_script: str = f"""#!/usr/bin/env bash
 set -e
 
@@ -78,6 +80,7 @@ if [ -f "requirements.txt" ]; then
 fi
 pip install jupyter
 mkdir -p $1/{notebook_groups}
+python extract_metadata_from_notebook.py --input {notebook_filepath} --output $1/{notebook_groups}/{notebook_name_plain}.metadata.json
 jupyter nbconvert --stdout --to html {notebook_filepath} > $1/{notebook_groups}/{notebook_name_plain}.html
 cd -
 """
