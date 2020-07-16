@@ -10,7 +10,6 @@ dependencies:
   - ca-certificates=2019.8.28
   - pip
   - virtualenv=16.0.0
-  - numpy=1.15.4
   - astropy=3.0.4
   - pip:
     - future==0.17.1
@@ -21,7 +20,6 @@ dependencies:
     - jupyter-client==5.3.3
     - astroquery==0.3.10
     - matplotlib>=2.2.2
-    - numpy>=1.15.4
     - photutils>=0.6
     - webbpsf>=0.8
     - scikit-learn>=0.20
